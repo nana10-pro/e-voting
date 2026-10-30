@@ -307,23 +307,22 @@ Keterkaitan: Misi 2 & Visi (Meraih prestasi seni, memperluas relasi, dan mengang
 
         // 3. Inisialisasi Firebase
     firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+    const database = firebase.database();a
 
-    // 4. Membaca data suara secara Real-time
-    database.ref('suara').on('value', (snapshot) => {
-        const data = snapshot.val() || { paslon1: 0, paslon2: 0 };
-        
-        if (document.getElementById('suara-paslon1')) {
-            document.getElementById('suara-paslon1').innerText = data.paslon1;
-        }
-        if (document.getElementById('suara-paslon2')) {
-            document.getElementById('suara-paslon2').innerText = data.paslon2;
-        }
-        if (document.getElementById('total-suara')) {
-            document.getElementById('total-suara').innerText = data.paslon1 + data.paslon2;
-        }
-    });
-
+    // Membaca data suara secara Real-time
+database.ref('suara').on('value', (snapshot) => {
+    const data = snapshot.val() || { paslon1: 0, paslon2: 0 };
+    
+    if (document.getElementById('suara-paslon1')) {
+        document.getElementById('suara-paslon1').innerText = data.paslon1;
+    }
+    if (document.getElementById('suara-paslon2')) {
+        document.getElementById('suara-paslon2').innerText = data.paslon2;
+    }
+    if (document.getElementById('total-suara')) {
+        document.getElementById('total-suara').innerText = data.paslon1 + data.paslon2;
+    }
+});
     // 5. Fungsi Tombol Voting
     function votePaslon1() {
         database.ref('suara/paslon1').transaction((current) => {
