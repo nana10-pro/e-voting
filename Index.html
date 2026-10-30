@@ -306,43 +306,36 @@ Keterkaitan: Misi 2 & Visi (Meraih prestasi seni, memperluas relasi, dan mengang
         };
 
         // 3. Inisialisasi Firebase
-        firebase.initializeApp(firebaseConfig);
-        function votePaslon1() {
-    firebase.database().ref('votes/paslon1').transaction(function(currentVotes) {
-        return (currentVotes || 0) + 1;
-    });
-}
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
-function votePaslon2() {
-    firebase.database().ref('votes/paslon2').transaction(function(currentVotes) {
-        return (currentVotes || 0) + 1;
+    // 4. Membaca data suara secara Real-time
+    database.ref('suara').on('value', (snapshot) => {
+        const data = snapshot.val() || { paslon1: 0, paslon2: 0 };
+        
+        if (document.getElementById('suara-paslon1')) {
+            document.getElementById('suara-paslon1').innerText = data.paslon1;
+        }
+        if (document.getElementById('suara-paslon2')) {
+            document.getElementById('suara-paslon2').innerText = data.paslon2;
+        }
+        if (document.getElementById('total-suara')) {
+            document.getElementById('total-suara').innerText = data.paslon1 + data.paslon2;
+        }
     });
-}
-        const database = firebase.database();
 
-        // 4. Membaca data suara secara Real-time
-        database.ref('suara').on('value', (snapshot) => {
-            const data = snapshot.val() || { paslon1: 0, paslon2: 0 };
-            
-            if(document.getElementById('suara-paslon1')) {
-                document.getElementById('suara-paslon1').innerText = data.paslon1;
-            }
-            if(document.getElementById('suara-paslon2')) {
-                document.getElementById('suara-paslon2').innerText = data.paslon2;
-            }
-            if(document.getElementById('total-suara')) {
-                document.getElementById('total-suara').innerText = data.paslon1 + data.paslon2;
-            }
+    // 5. Fungsi Tombol Voting
+    function votePaslon1() {
+        database.ref('suara/paslon1').transaction((current) => {
+            return (current || 0) + 1;
         });
+    }
 
-        // 5. Fungsi Tombol Voting
-        function votePaslon1() {
-            database.ref('suara/paslon1').transaction((current) => (current || 0) + 1);
-        }
-
-        function votePaslon2() {
-            database.ref('suara/paslon2').transaction((current) => (current || 0) + 1);
-        }
-    </script>
+    function votePaslon2() {
+        database.ref('suara/paslon2').transaction((current) => {
+            return (current || 0) + 1;
+        });
+    }
+</script>
 </body>
 </html>
